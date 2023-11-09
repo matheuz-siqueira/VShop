@@ -24,11 +24,10 @@ public class ProductDTO
     public decimal Price { get; set; }
     
     [Required(ErrorMessage = "the stock is required")]
-    [Range(0.1, 9999)]
+    [Range(1, 9999)]
     public long Stock { get; set; }
     public string ImageUrl { get; set; }
 
-    [JsonIgnore]
-    public Category Category { get; set; }
+    public string CategoryName { get; set; }
     public int CategoryId { get; set; }
 }

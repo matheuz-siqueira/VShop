@@ -47,17 +47,14 @@ public class ProductController : ControllerBase
         return new CreatedAtRouteResult("GetProduct", new { id = productDTO.Id}, productDTO); 
     }
 
-    [HttpPut("{id}")]
-    public async Task<ActionResult> Update(int id, ProductDTO productDTO)
+    [HttpPut]
+    public async Task<ActionResult> Update(ProductDTO productDTO)
     {
-        if(id != productDTO.Id)
-            return BadRequest(new { message = "different ids"}); 
-
         if(productDTO is null)
             return BadRequest(new { message = "Product not found"}); 
 
         await _service.Update(productDTO); 
-        return NoContent(); 
+        return Ok(productDTO); 
         
     }
 
@@ -69,6 +66,6 @@ public class ProductController : ControllerBase
             return NotFound(new { message = "Product not found"}); 
 
         await _service.Delete(id); 
-        return NoContent();  
+        return NoContent(); 
     }
 }
