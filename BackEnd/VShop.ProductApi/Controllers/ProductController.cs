@@ -1,5 +1,7 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using VShop.ProductApi.DTOs;
+using VShop.ProductApi.Roles;
 using VShop.ProductApi.Services.Contracts;
 
 namespace VShop.ProductApi.Controllers;
@@ -37,6 +39,7 @@ public class ProductController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize(Roles = Role.Admin)]
     public async Task<ActionResult> Create(ProductDTO productDTO)
     {
         if(productDTO is null)
@@ -48,6 +51,7 @@ public class ProductController : ControllerBase
     }
 
     [HttpPut]
+    [Authorize(Roles = Role.Admin)]
     public async Task<ActionResult> Update(ProductDTO productDTO)
     {
         if(productDTO is null)
@@ -59,6 +63,7 @@ public class ProductController : ControllerBase
     }
 
     [HttpDelete("{id}")]
+    [Authorize(Roles = Role.Admin)]
     public async Task<ActionResult> Delete(int id)
     {
         var product = await _service.GetById(id); 

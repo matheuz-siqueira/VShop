@@ -97,7 +97,7 @@ public class DatabaseIdentityServerInitialize : IDatabaseSeedInitialize
                     new Claim(JwtClaimTypes.Name, $"{client.FirstName} {client.LastName}"),
                     new Claim(JwtClaimTypes.GivenName, client.FirstName),
                     new Claim(JwtClaimTypes.FamilyName, client.LastName),
-                    new Claim(JwtClaimTypes.Role, IdentityConfiguration.Admin)
+                    new Claim(JwtClaimTypes.Role, IdentityConfiguration.Client)
                 }).Result;
             }
         }

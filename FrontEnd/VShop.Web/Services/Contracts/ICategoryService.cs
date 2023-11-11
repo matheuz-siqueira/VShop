@@ -4,5 +4,5 @@ namespace VShop.Web.Services.Contracts;
 
 public interface ICategoryService
 {
-    Task<IEnumerable<CategoryViewModel>> GetAll();
+    Task<IEnumerable<CategoryViewModel>> GetAll(string token);
 }
