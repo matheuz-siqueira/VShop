@@ -7,4 +7,10 @@
     <UserSecretsId>00ec3e77-f19e-4f97-8d14-77354cd90c16</UserSecretsId>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="6.0.24" />
+    <PackageReference Include="Microsoft.AspNetCore.Authorization" Version="6.0.24" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.33.0" />
+  </ItemGroup>
+
 </Project>
