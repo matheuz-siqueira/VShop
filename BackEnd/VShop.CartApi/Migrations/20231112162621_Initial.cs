@@ -20,7 +20,7 @@ namespace VShop.CartApi.Migrations
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     UserId = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    CuponCode = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: true)
+                    CouponCode = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4")
                 },
                 constraints: table =>
@@ -65,12 +65,6 @@ namespace VShop.CartApi.Migrations
                 {
                     table.PrimaryKey("PK_CartItems", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_CartItems_CartHeaders_CartHeaderId",
-                        column: x => x.CartHeaderId,
-                        principalTable: "CartHeaders",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
                         name: "FK_CartItems_Products_ProductId",
                         column: x => x.ProductId,
                         principalTable: "Products",
@@ -78,11 +72,6 @@ namespace VShop.CartApi.Migrations
                         onDelete: ReferentialAction.Cascade);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_CartItems_CartHeaderId",
-                table: "CartItems",
-                column: "CartHeaderId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_CartItems_ProductId",
@@ -93,10 +82,10 @@ namespace VShop.CartApi.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "CartItems");
+                name: "CartHeaders");
 
             migrationBuilder.DropTable(
-                name: "CartHeaders");
+                name: "CartItems");
 
             migrationBuilder.DropTable(
                 name: "Products");
