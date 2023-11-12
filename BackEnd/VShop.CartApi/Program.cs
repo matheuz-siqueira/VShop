@@ -1,11 +1,12 @@
+using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using VShop.ProductApi.Context;
-using VShop.ProductApi.Repositories;
-using VShop.ProductApi.Repositories.Contracts;
-using VShop.ProductApi.Services;
-using VShop.ProductApi.Services.Contracts;
+using VShop.CartApi.Context;
+using VShop.CartApi.Repositories;
+using VShop.CartApi.Repositories.Contracts;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,10 +15,9 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-
 builder.Services.AddSwaggerGen(c => 
 {
-    c.SwaggerDoc("v1", new OpenApiInfo { Title = "VShop.ProductApi", Version = "v1"});
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "VShop.CartApi", Version = "v1"});
     
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
@@ -47,6 +47,8 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseMySql(
             builder.Configuration.GetConnectionString("DefaultConnection"),
@@ -55,8 +57,6 @@ builder.Services.AddDbContext<AppDbContext>(options =>
         )
     );
 
-builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-
 builder.Services.AddCors(options => 
 {
     options.AddPolicy("CorsPolicy", 
@@ -64,12 +64,6 @@ builder.Services.AddCors(options =>
         .AllowAnyMethod()
         .AllowAnyOrigin()); 
 });
-
-builder.Services.AddScoped<IProductRepository, ProductRepository>();
-builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
-
-builder.Services.AddScoped<ICategoryService, CategoryService>();
-builder.Services.AddScoped<IProductService, ProductService>();
 
 builder.Services.AddAuthentication("Bearer")
     .AddJwtBearer("Bearer", options => 
@@ -91,6 +85,7 @@ builder.Services.AddAuthorization(options =>
     });
 });
 
+builder.Services.AddScoped<ICartRepository, CartRepository>();
 
 var app = builder.Build();
 
@@ -105,11 +100,10 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.UseCors("CorsPolicy");
+app.UseCors("CorsPolicy"); 
 app.UseRouting();
 
 app.UseAuthentication();
-
 app.UseAuthorization();
 
 app.MapControllers();
