@@ -33,7 +33,7 @@ public class CartRepository : ICartRepository
         try
         {
             CartItem cartItem = await _context.CartItems.FirstOrDefaultAsync(c => c.Id == cartItemId); 
-            int total = _context.CartItems.Where(c => c.CartHeaderId == cartItem.CartHeader.Id).Count(); 
+            int total = _context.CartItems.Where(c => c.CartHeaderId == cartItem.CartHeaderId).Count(); 
             
             _context.CartItems.Remove(cartItem);
             

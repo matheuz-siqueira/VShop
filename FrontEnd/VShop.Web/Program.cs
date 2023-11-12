@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication.OAuth;
 using VShop.Web.Services;
 using VShop.Web.Services.Contracts;
 
@@ -13,17 +12,18 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddHttpClient("ProductApi", c => 
 {
     c.BaseAddress = new Uri(builder.Configuration["ServiceUri:ProductApi"]);
-}).ConfigurePrimaryHttpMessageHandler(_ => new HttpClientHandler
-    {
-        ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => 
-            cert.Verify()
-    }
-);
+});
+
+builder.Services.AddHttpClient("CartApi", c => 
+{
+    c.BaseAddress = new Uri(builder.Configuration["ServiceUri:CartApi"]);
+});
 
 
 
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
+builder.Services.AddScoped<ICartService, CartService>();
 
 builder.Services.AddAuthentication(options => 
 {
