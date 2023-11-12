@@ -10,7 +10,7 @@ using VShop.CartApi.Context;
 namespace VShop.CartApi.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20231112011608_Initial")]
+    [Migration("20231112162621_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -26,7 +26,7 @@ namespace VShop.CartApi.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<string>("CuponCode")
+                    b.Property<string>("CouponCode")
                         .HasMaxLength(100)
                         .HasColumnType("varchar(100)");
 
@@ -56,8 +56,6 @@ namespace VShop.CartApi.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CartHeaderId");
 
                     b.HasIndex("ProductId");
 
@@ -103,19 +101,11 @@ namespace VShop.CartApi.Migrations
 
             modelBuilder.Entity("VShop.CartApi.Models.CartItem", b =>
                 {
-                    b.HasOne("VShop.CartApi.Models.CartHeader", "CartHeader")
-                        .WithMany()
-                        .HasForeignKey("CartHeaderId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("VShop.CartApi.Models.Product", "Product")
                         .WithMany()
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("CartHeader");
 
                     b.Navigation("Product");
                 });
