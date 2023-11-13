@@ -9,9 +9,11 @@ namespace VShop.Web.Controllers;
 public class CartController : Controller
 {
     private readonly ICartService _service;
-    public CartController(ICartService service)
+    private readonly ICouponService _couponService;
+    public CartController(ICartService service, ICouponService couponService)
     {
         _service = service;
+        _couponService = couponService; 
     }    
 
     [Authorize]
@@ -42,13 +44,52 @@ public class CartController : Controller
         var cart = await _service.GetCartByUseIdAsync(GetUserId(), await GetAccessToken());
         if(cart?.CartHeader is not null)
         {
+
+            if(!string.IsNullOrEmpty(cart.CartHeader.CouponCode))
+            {
+                var coupon = await _couponService.GetDiscountCoupon(cart.CartHeader.CouponCode, await GetAccessToken());
+            
+                if(coupon?.CouponCode is not null)
+                {
+                    cart.CartHeader.Discount = coupon.Discount;
+                }
+            }
+
             foreach(var item in cart.CartItems)
             {
-                cart.CartHeader.TotalAmount += (item.Product.Price * item.Quantity); 
+                cart.CartHeader.TotalAmount += item.Product.Price * item.Quantity; 
             }
+
+            cart.CartHeader.TotalAmount = cart.CartHeader.TotalAmount -
+                (cart.CartHeader.TotalAmount * cart.CartHeader.Discount) / 100;
         }
         return cart;
     }   
+
+    [HttpPost]
+    public async Task<IActionResult> ApplyCoupon(CartViewModel cart)
+    {
+        if(ModelState.IsValid)
+        {
+            var result = await _service.ApplyCouponAsync(cart, await GetAccessToken()); 
+            if(result)
+            {
+                return RedirectToAction(nameof(Index)); 
+            }
+        }
+        return View();
+    } 
+
+    [HttpPost]
+    public async Task<IActionResult> DeleteCoupon()
+    {
+        var result = await _service.RemoveCouponAsync(GetUserId(), await GetAccessToken());
+        if(result)
+        {
+            return RedirectToAction(nameof(Index)); 
+        }
+        return View();
+    }
 
     private async Task<string> GetAccessToken()
     {

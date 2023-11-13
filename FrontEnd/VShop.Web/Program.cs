@@ -9,14 +9,19 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 
 
-builder.Services.AddHttpClient("ProductApi", c => 
+builder.Services.AddHttpClient<IProductService, ProductService>("ProductApi", c => 
 {
     c.BaseAddress = new Uri(builder.Configuration["ServiceUri:ProductApi"]);
 });
 
-builder.Services.AddHttpClient("CartApi", c => 
+builder.Services.AddHttpClient<ICartService, CartService>("CartApi", c => 
 {
     c.BaseAddress = new Uri(builder.Configuration["ServiceUri:CartApi"]);
+});
+
+builder.Services.AddHttpClient<ICouponService, CouponService>("DiscountApi", c => 
+{
+    c.BaseAddress = new Uri(builder.Configuration["ServiceUri:DiscountApi"]);
 });
 
 
@@ -24,6 +29,7 @@ builder.Services.AddHttpClient("CartApi", c =>
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<ICartService, CartService>();
+builder.Services.AddScoped<ICouponService, CouponService>();
 
 builder.Services.AddAuthentication(options => 
 {
