@@ -13,7 +13,7 @@ public class CouponController : ControllerBase
     private readonly ICouponRepository _repository;
     public CouponController(ICouponRepository repository)
     {
-        _repository = repository ?? throw new ArgumentNullException(nameof(repository)); 
+        _repository = repository;
     }
 
     [HttpGet("{couponCode}")]

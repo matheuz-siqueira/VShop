@@ -1,5 +1,3 @@
-using VShop.CartApi.Models;
-
 namespace VShop.CartApi.DTOs;
 
 public class CartDTO

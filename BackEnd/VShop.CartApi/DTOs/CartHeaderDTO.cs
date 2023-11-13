@@ -8,5 +8,5 @@ public class CartHeaderDTO
     
     [Required(ErrorMessage = "UserId is required")]
     public string UserId { get; set; } = string.Empty;
-    public string CuponCode { get; set; } = string.Empty;
+    public string CouponCode { get; set; } = string.Empty;
 }

@@ -87,13 +87,33 @@ public class CartRepository : ICartRepository
         return _mapper.Map<CartDTO>(cart); 
     }
 
-    public Task<bool> ApplyCouponAsync(string userId, string couponCode)
+    public async Task<bool> ApplyCouponAsync(string userId, string couponCode)
     {
-        throw new NotImplementedException();
+        var cartHeaderApplyCoupon = await _context.CartHeaders
+            .FirstOrDefaultAsync(c => c.UserId == userId);
+
+        if(cartHeaderApplyCoupon is not null)
+        {
+            cartHeaderApplyCoupon.CouponCode = couponCode; 
+            _context.CartHeaders.Update(cartHeaderApplyCoupon);
+            await _context.SaveChangesAsync();
+            return true; 
+        }
+        return false; 
     }
-    public Task<bool> DeleteCouponAsync(string userId)
+    public async Task<bool> DeleteCouponAsync(string userId)
     {
-        throw new NotImplementedException();
+        var cartHeaderApplyCoupon = await _context.CartHeaders
+            .FirstOrDefaultAsync(c => c.UserId == userId);
+
+        if(cartHeaderApplyCoupon is not null)
+        {
+            cartHeaderApplyCoupon.CouponCode = ""; 
+            _context.CartHeaders.Update(cartHeaderApplyCoupon);
+            await _context.SaveChangesAsync();
+            return true; 
+        }
+        return false; 
     }
 
     private async Task SaveProductInDataBase(CartDTO cartDTO, Cart cart)

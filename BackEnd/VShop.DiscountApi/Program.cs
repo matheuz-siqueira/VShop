@@ -85,7 +85,6 @@ builder.Services.AddAuthorization(options =>
 });
 
 var app = builder.Build();
-
 app.UseCookiePolicy(new CookiePolicyOptions { MinimumSameSitePolicy = SameSiteMode.Strict});
 
 // Configure the HTTP request pipeline.
