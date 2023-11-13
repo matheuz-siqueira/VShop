@@ -1,6 +1,8 @@
-namespace VShop.Web.Models;
+using VShop.CartApi.Models;
 
-public class CartHeaderViewModel
+namespace VShop.CartApi.DTOs;
+
+public class CheckoutHeaderDTO
 {
     public int Id { get; set; }
     public string UserId { get; set; } 
@@ -17,4 +19,7 @@ public class CartHeaderViewModel
     public string NameOnCard { get; set; }
     public string CVV { get; set; }
     public string ExpireMonthYear { get; set; }
+
+    public int CartTotalItems { get; set; } 
+    public IEnumerable<CartItemDTO> CartItems { get; set; }
 }

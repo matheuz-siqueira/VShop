@@ -38,13 +38,29 @@ public class CartController : ControllerBase
     [HttpPost("applycoupon")]
     public async Task<ActionResult<CartDTO>> ApplyCoupon(CartDTO cartDTO)
     {
-        var result = await _repository.ApplyCouponAsync(cartDTO.CartHeader.UserId, cartDTO.CartHeader.CouponCode);
+        var result = await _repository.ApplyCouponAsync(
+            cartDTO.CartHeader.UserId, cartDTO.CartHeader.CouponCode);
         if(!result)
         {
             return NotFound(new 
                 { message = $"CartHeader not found for userId = {cartDTO.CartHeader.UserId}"});
         }
         return Ok(result);
+    }
+
+    [HttpPost("checkout")]
+    public async Task<ActionResult<CheckoutHeaderDTO>> Checkout(CheckoutHeaderDTO checkout)
+    {
+        var cart = await _repository.GetCartByUserIdAsync(checkout.UserId);
+        if(cart is null)
+        {
+            return NotFound(new { message = $"Cart not found for {checkout.UserId}"});
+        }
+        checkout.CartItems = cart.CartItems;
+        checkout.DateTime = DateTime.Now;
+
+        return Ok(checkout);
+
     }
 
     [HttpPut("updatecart")]
